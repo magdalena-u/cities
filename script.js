@@ -50,6 +50,16 @@ function getValue() {
     }
 }
 
+//create element & append child function
+
+function createEl(el) {
+    return document.createElement(el)
+}
+
+function append(parent, child) {
+    return parent.appendChild(child)
+}
+
 //choose the coutry from automated list
 function chooseCountry() {
     let items = document.querySelectorAll('.country_item');
@@ -62,14 +72,14 @@ function chooseCountry() {
 input.addEventListener('keyup', getValue)
 
 
-//show the cities
+//fetch 10 the most polluted cities
 
-let btn = document.querySelector('button')
+let search = document.querySelector('.fa-search')
 let flag = false;
 
 function showCities(e) {
     e.preventDefault()
-    const url = `https://api.openaq.org/v1/latest?limit=10&country=${countryCode}&parameter=co&order_by=measurements.value`;
+    const url = `https://api.openaq.org/v1/latest?limit=10&country=${countryCode}&parameter=pm25&order_by=measurements[0].value&sort=desc`;
     let cityCont = document.getElementById('cities_container');
 
     if (flag) {
@@ -78,25 +88,80 @@ function showCities(e) {
         flag = !flag;
     }
 
-
     fetch(url)
         .then(function (res) {
-            //return console.log(res.json())
             return res.json()
         })
         .then(function (data) {
             cityCont = data.results;
+            console.log(data)
             return cityCont.map(function (city) {
                 let container = document.getElementById('cities_container')
-                let div = document.createElement('div');
+                //create element
+                let div = createEl('div');
+                let number = createEl('div')
+                let numberSpan = createEl('span')
+                let cityItem = createEl('div')
+                let citySpan = createEl('span')
+                let p = createEl('p')
+                //add class
                 div.classList.add('city_div');
-                let span = document.createElement('span');
-                span.innerHTML = `${city.city}`;
-                div.appendChild(span);
-                container.appendChild(div);
+                number.classList.add('number');
+                cityItem.classList.add('city_item');
+                //inner HTML
+                numberSpan.innerHTML = `${city.measurements[0].value}`;
+                citySpan.innerHTML = `${city.city}`;
+                p.innerHTML = `read more +`;
+                //append
+                append(number, numberSpan);
+                append(div, number);
+                append(div, cityItem);
+                append(cityItem, citySpan);
+                append(cityItem, p);
+                append(container, div);
+                let readMore = document.querySelectorAll('p');
+                readClick(readMore)
             })
         })
     flag = true;
 }
 
-btn.addEventListener('click', showCities)
+search.addEventListener('click', showCities)
+
+//add cities description from wikipedia
+
+function showDescription() {
+    const parent = this.parentNode;
+    parent.querySelector('p').innerHTML = '';
+    let searchTerm = parent.querySelector('span').innerHTML;
+    const wiki = `http://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=&explaintext=&formatversion=2&titles=${searchTerm}`;
+
+    fetch(wiki)
+        .then(function (res) {
+            return res.json()
+        })
+        .then(function (data) {
+            let description = createEl('div');
+            let less = createEl('p');
+            less.innerHTML = 'read less -'
+            description.classList.add('city_text');
+            append(parent, description);
+            append(parent, less);
+            description.innerHTML = data.query.pages[0].extract;
+            less.addEventListener('click', readLess)
+        })
+}
+
+// function readLess() {
+//     const parent = this.parentNode;
+
+//     let readMore = parent.querySelector('p');
+//     readClick(readMore)
+
+// }
+
+function readClick(readMore) {
+    readMore.forEach(function (item) {
+        item.addEventListener('click', showDescription)
+    })
+}
