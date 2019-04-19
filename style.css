@@ -117,10 +117,6 @@ input {
     padding-right: 0.5em;
 }
 
-.city_item span {
-    /* text-transform: lowercase; */
-}
-
 .city_item p {
     color: #00EFB3;
     text-align: right;
@@ -132,7 +128,9 @@ input {
     font-size: 18px;
 }
 
-/* colores:
-grey:C4C4C4
-blue:193F4C
-green: DBED82*/
+@media only screen and (min-width:500px) {
+    body {
+        width: 60vh;
+        margin: 0 auto;
+    }
+}
