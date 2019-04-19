@@ -20,6 +20,11 @@ let countryList = [];
 let countryCode;
 let countryResult = document.querySelector('.country_list')
 
+//local storage input
+if (input.value === "") {
+    input.value = localStorage.getItem('inputValue')
+}
+
 // clean the list of countries
 function cleanList() {
     countryResult.innerHTML = "";
@@ -50,6 +55,18 @@ function getValue() {
     }
 }
 
+//choose the coutry from automated list
+function chooseCountry() {
+    let items = document.querySelectorAll('.country_item');
+    items.forEach(item => item.addEventListener('click', function () {
+        document.getElementById('country').value = item.innerHTML
+        cleanList()
+        populateStorage()
+    }))
+}
+
+input.addEventListener('keyup', getValue)
+
 //create element & append child function
 
 function createEl(el) {
@@ -60,19 +77,8 @@ function append(parent, child) {
     return parent.appendChild(child)
 }
 
-//choose the coutry from automated list
-function chooseCountry() {
-    let items = document.querySelectorAll('.country_item');
-    items.forEach(item => item.addEventListener('click', function () {
-        document.getElementById('country').value = item.innerHTML
-        cleanList()
-    }))
-}
-
-input.addEventListener('keyup', getValue)
-
-
 //fetch 10 the most polluted cities
+
 
 let search = document.querySelector('.fa-search')
 let flag = false;
@@ -94,7 +100,6 @@ function showCities(e) {
         })
         .then(function (data) {
             cityCont = data.results;
-            console.log(data)
             return cityCont.map(function (city) {
                 let container = document.getElementById('cities_container')
                 //create element
@@ -110,7 +115,7 @@ function showCities(e) {
                 cityItem.classList.add('city_item');
                 //inner HTML
                 numberSpan.innerHTML = `${city.measurements[0].value}`;
-                citySpan.innerHTML = `${city.city}`;
+                citySpan.innerHTML = `${city.city.replace('CCAA','').replace('Com. ','').replace('Warszawa','Warsaw')}`;
                 p.innerHTML = `read more +`;
                 //append
                 append(number, numberSpan);
@@ -141,27 +146,38 @@ function showDescription() {
             return res.json()
         })
         .then(function (data) {
+            console.log(data)
             let description = createEl('div');
             let less = createEl('p');
             less.innerHTML = 'read less -'
             description.classList.add('city_text');
+            less.classList.add('less');
             append(parent, description);
             append(parent, less);
-            description.innerHTML = data.query.pages[0].extract;
+            if (data.query.pages[0].invalid || data.query.pages[0].missing || data.query.pages[0].extract == "") {
+                description.innerHTML = "No information about the city"
+            } else description.innerHTML = data.query.pages[0].extract;
             less.addEventListener('click', readLess)
         })
 }
 
-// function readLess() {
-//     const parent = this.parentNode;
-
-//     let readMore = parent.querySelector('p');
-//     readClick(readMore)
-
-// }
+function readLess() {
+    const parent = this.parentNode;
+    let description = parent.querySelector('.city_text');
+    let less = parent.querySelector('.less')
+    let readMore = parent.querySelector('p');
+    readMore.innerHTML = `read more +`;
+    description.remove()
+    less.remove()
+}
 
 function readClick(readMore) {
     readMore.forEach(function (item) {
         item.addEventListener('click', showDescription)
     })
+}
+
+///storage data
+function populateStorage() {
+    localStorage.setItem('inputValue', document.getElementById('country').value)
 }
