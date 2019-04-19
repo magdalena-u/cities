@@ -139,7 +139,7 @@ function showDescription() {
     const parent = this.parentNode;
     parent.querySelector('p').innerHTML = '';
     let searchTerm = parent.querySelector('span').innerHTML;
-    const wiki = `http://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=&explaintext=&formatversion=2&titles=${searchTerm}`;
+    const wiki = `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=extracts&exintro=&explaintext=&formatversion=2&titles=${searchTerm}`;
 
     fetch(wiki)
         .then(function (res) {
