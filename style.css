@@ -8,46 +8,128 @@ body {
     position: relative;
     flex-direction: column;
     align-items: center;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Quicksand', sans-serif;
     color: #193F4C;
     font-size: 1.6em;
     height: 100vh;
+    background-color: rgb(248, 244, 244);
 }
 
+/* search form */
 form {
     display: flex;
     position: relative;
     flex-direction: column;
     align-items: center;
-    height: 30vh;
     width: 80%;
     padding-top: 4vh;
 }
 
+.list_container {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    margin-bottom: 3vh;
+}
+
 label {
     padding-bottom: 3vh;
+    font-weight: 700;
 }
 
 input {
     outline-style: none;
-    line-height: 2em;
-    padding-left: 1.2em;
+    width: 70%;
+    height: 30px;
     border: 2px solid #C4C4C4;
     border-radius: 10px;
-}
-
-
-
-input:active {
-    border: 2px solid #DBED82;
+    padding-left: 10px;
 }
 
 .country_list {
+    position: absolute;
     list-style: none;
+    top: 34px;
+    border-radius: 10px;
     background-color: #C4C4C4;
     color: white;
-    padding-left: 1.2em;
-    border-radius: 10px;
+    line-height: 1.6em;
+    width: 70%;
+    padding-left: 10px;
+    z-index: 1;
+}
+
+.fa-search {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.title {
+    margin-bottom: 1vh;
+    font-weight: 700;
+}
+
+.label {
+    font-size: 0.8em;
+    margin-bottom: 2vh;
+}
+
+/* city item */
+
+#cities_container {
+    width: 100%;
+}
+
+.city_div {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.number {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    background-color: #B72C3E;
+    border-radius: 50%;
+    color: white;
+}
+
+.number span {
+    position: absolute;
+    font-size: 16px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.city_item {
+    width: 70%;
+    background-color: #fff;
+    border-radius: 15px;
+    margin-bottom: 1vh;
+    font-size: 24px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+.city_item span {
+    /* text-transform: lowercase; */
+}
+
+.city_item p {
+    color: #00EFB3;
+    text-align: right;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.city_text {
+    font-size: 18px;
 }
 
 /* colores:
